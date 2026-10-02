@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-H+khTA1oYEMW+c02JuTAJgYG2+qqZNUjcIQAbbbwQDU=' 'sha256-jeii/liVbdovI69m00cJk077Vx9LZNHz39hjMDNseUI='; style-src 'unsafe-inline'; connect-src https://api.github.com; img-src blob: https://github.com https://private-user-images.githubusercontent.com https://user-images.githubusercontent.com https://camo.githubusercontent.com https://github.githubassets.com; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>es-forum</title>
+<style>
+:root{--bg:#f6f7f8;--card:#fff;--ink:#1f2328;--muted:#656d76;--line:#d8dee4;--accent:#0969da;--err:#cf222e;--ok:#1a7f37;--me:#fff8c5;--bot:#f0f4ff;--fs:16px;--w:860px}
+@media(min-width:1000px){:root{--fs:18px;--w:1200px}}
+:root[data-theme=dark]{--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--muted:#8d96a0;--line:#30363d;--accent:#4493f8;--err:#f85149;--ok:#3fb950;--me:#2d2a12;--bot:#121d2f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1117;--card:#161b22;--ink:#e6edf3;--muted:#8d96a0;--line:#30363d;--accent:#4493f8;--err:#f85149;--ok:#3fb950;--me:#2d2a12;--bot:#121d2f}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs)/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+button{cursor:pointer;min-height:40px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:disabled{opacity:.5;cursor:default}
+header{position:sticky;top:0;z-index:5;display:flex;gap:6px;align-items:center;padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top));background:var(--card);border-bottom:1px solid var(--line)}
+header h1{flex:1;font-size:17px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header button{min-width:40px;padding:6px 10px}
+#status{padding:6px 12px;color:var(--muted);font-size:.875em;min-height:1.5em}
+#status.err{color:var(--err)}#status.ok{color:var(--ok)}
+main{max-width:var(--w);margin:0 auto;padding:0 8px 140px}
+.hidden{display:none!important}
+#settings{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin:8px 0;display:grid;gap:8px}
+#settings label{display:grid;gap:4px;color:var(--muted);font-size:14px}
+#settings .row{display:flex;gap:8px;flex-wrap:wrap}
+#filters{display:flex;gap:6px;margin:8px 0}
+#filters input{flex:1;min-width:0}
+.item{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:6px 0}
+.item.mine{background:var(--me)}
+.item .t{font-weight:600}
+.item .n{color:var(--muted);font-weight:400}
+.item .m{color:var(--muted);font-size:.8125em;margin-top:2px}
+.item.new .t::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}
+.item.closed{opacity:.7}
+.who{font-weight:600;color:var(--ink)}
+.who.c{border-radius:9px;padding:0 6px;color:#1f2328}
+.sw{display:inline-block;font-family:ui-monospace,monospace;font-size:12px;border-radius:9px;padding:0 6px;margin-right:4px;color:#1f2328}
+#people{min-height:6em;font-family:ui-monospace,monospace;font-size:14px}
+.lab{display:inline-block;font-size:12px;border-radius:10px;padding:0 7px;margin:2px 3px 0 0;border:1px solid var(--line)}
+.post{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden}
+.post.bot{background:var(--bot)}
+.post.seen-new{box-shadow:inset 3px 0 0 var(--accent)}
+.post .h{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--line);font-size:.8125em;color:var(--muted)}
+.post .h b{color:var(--ink)}
+.post .h a{color:var(--muted);text-decoration:none}
+.post .b{padding:4px 12px 8px;overflow-wrap:anywhere}
+.post .b img{max-width:100%;height:auto}
+.post .b pre{overflow-x:auto;background:var(--bg);padding:8px;border-radius:6px;font-size:13px}
+.post .b code{font-size:.9em}
+.post .b table{display:block;overflow-x:auto;border-collapse:collapse}
+.post .b td,.post .b th{border:1px solid var(--line);padding:4px 6px}
+.post .b mark{background:#fff3a0;color:#1f2328}
+.post .b details{border:1px solid var(--line);border-radius:6px;padding:4px 8px;margin:6px 0}
+.post .f{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 12px 8px}
+.post .f button,.post .f a.gh{min-height:32px;padding:2px 10px;font-size:.875em}
+.post .f a.gh{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--ink);background:var(--card)}
+.post .f .gap{flex:1}
+.post .pid{font-family:ui-monospace,monospace;font-size:.75em;color:var(--muted)}
+.mk.tx{font-weight:600}
+.pid,.texsrc{display:none}
+body.show-ids .pid,body.show-tex .texsrc{display:inline}
+.texsrc{font-family:ui-monospace,monospace;font-size:.75em;color:var(--muted);margin-left:3px}
+#ui{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:8px}
+#ui .row label{flex:1;min-width:9em}
+.rxs{display:contents}
+.rx{display:inline-flex;align-items:center;gap:3px;min-height:28px;padding:0 8px;border:1px solid var(--line);border-radius:14px;font-size:14px;color:var(--muted)}
+.pick{display:flex;flex-wrap:wrap;gap:4px}
+#quote{position:fixed;right:72px;z-index:7;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.post.long .b{max-height:24em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 80%,transparent)}
+.mk{font-weight:700}
+#composer{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);padding:8px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+#composer .in{max-width:var(--w);margin:0 auto;display:grid;gap:6px}
+#composer textarea{width:100%;min-height:44px;max-height:75vh;resize:vertical}
+#grip{height:18px;margin-top:-6px;cursor:ns-resize;touch-action:none;display:flex;justify-content:center;align-items:center}
+#grip::before{content:"";width:44px;height:5px;border-radius:3px;background:var(--line)}
+#composer .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#composer .hint{color:var(--muted);font-size:13px;flex:1;min-width:10em}
+#shot{display:grid;gap:6px;border:1px solid var(--line);border-radius:8px;padding:6px}
+#shot img{max-width:100%;max-height:30vh;object-fit:contain;justify-self:start}
+.shotimg{display:block;max-width:100%;height:auto;margin:6px 0;border:1px solid var(--line);border-radius:6px}
+.shotnote{color:var(--muted);font-size:13px}
+#stacked{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;font-size:14px}
+#stacked.none{color:var(--muted)}
+#jump{position:fixed;right:12px;bottom:120px;z-index:7;display:flex;flex-direction:column;gap:12px}
+#jump button{width:48px;height:48px;min-height:48px;border-radius:50%;padding:0;font-size:18px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+<header>
+  <button id="back" class="hidden" title="All threads">‹</button>
+  <h1 id="title">es-forum</h1>
+  <button id="newest" class="hidden" title="Jump to the newest post">↓</button>
+  <button id="reload" title="Reload">⟳</button>
+  <button id="gear" title="Settings">⚙</button>
+</header>
+<main>
+  <div id="status"></div>
+  <section id="settings" class="hidden">
+    <label>Token: a fine-grained personal access token for this one repository, with Issues: read and write (and Contents: read and write, to upload images)
+      <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+    <label>Repository, as owner/name
+      <input id="repo" spellcheck="false" autocomplete="off" placeholder="owner/name"></label>
+    <label>Your first name
+      <input id="name" spellcheck="false" autocomplete="off"></label>
+    <label>Upload folder: the folder in the repository where images pasted or picked in the reply box are committed, on the default branch (example: images). No image is uploaded until this is set.
+      <input id="folder" spellcheck="false" autocomplete="off"></label>
+    <label>Who's who, one person per line: login = first name, then a colour if you like (example: some-login = Ann #E8589A). The thread list shows the name in its colour beside the newest reply; a login not listed shows as it is.
+      <textarea id="people" spellcheck="false" autocomplete="off"></textarea></label>
+    <div id="palette" style="color:var(--muted);font-size:13px">Colours: <span class="sw" style="background:#EEE864">#EEE864</span><span class="sw" style="background:#E8589A">#E8589A</span><span class="sw" style="background:#1BB5C9">#1BB5C9</span><span class="sw" style="background:#2DA44E">#2DA44E</span></div>
+    <div id="ui">
+      <div style="color:var(--ink);font-weight:600">Display (applies at once, kept on this device)</div>
+      <div class="row">
+        <label>Text size<select id="ui-fs"><option value="">Auto (16 on a phone, 18 on a wide screen)</option><option value="15px">Small (15)</option><option value="17px">Medium (17)</option><option value="19px">Large (19)</option><option value="21px">Extra large (21)</option></select></label>
+        <label>Page width<select id="ui-w"><option value="">Auto (860 on a phone, 1200 on a wide screen)</option><option value="860px">Narrow (860)</option><option value="1200px">Wide (1200)</option><option value="1600px">Wider (1600)</option><option value="100%">Full window</option></select></label>
+        <label>Colours<select id="ui-theme"><option value="">As the device</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+      </div>
+      <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="ui-tex" style="min-height:0"> Debug: show the maths source beside each drawn mark or name</label>
+      <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="ui-ids" style="min-height:0"> Debug: show each post's comment id</label>
+    </div>
+    <div class="row"><button id="save" class="primary">Save</button><button id="clear">Clear token</button></div>
+    <div style="color:var(--muted);font-size:13px">All of this is kept only in this browser's own storage on this device.</div>
+  </section>
+  <section id="list">
+    <div id="stacked" class="hidden"></div>
+    <div id="filters">
+      <input id="q" type="search" placeholder="Filter by title, number or label">
+      <select id="state"><option value="new">New since last visit</option><option value="open">Open</option><option value="closed">Closed</option><option value="all">All</option></select>
+    </div>
+    <div id="items"></div>
+  </section>
+  <section id="thread" class="hidden"></section>
+</main>
+<div id="composer" class="hidden">
+  <div class="in">
+    <div id="grip" title="Drag to make the reply box taller or shorter; tap to switch between short and tall"></div>
+    <div id="shot" class="hidden">
+      <img id="shotimg" alt="The image to upload">
+      <div class="hint" id="shotwarn"></div>
+      <div class="row"><button id="shotup" class="primary">Upload</button><button id="shotno">Cancel</button></div>
+    </div>
+    <textarea id="draft" rows="2" placeholder="Write a comment (Markdown). Your draft is kept on this device until it posts."></textarea>
+    <div class="row">
+      <span class="hint" id="hint">A comment starts a reply run, about 4 Actions minutes. Starting with note: or pc: starts none.</span>
+      <input id="pick" type="file" accept="image/*" class="hidden">
+      <button id="img" title="Add an image (or paste one into the box)">🖼</button>
+      <button id="note" title="Post with note: in front; starts no run">Post as note</button>
+      <button id="post" class="primary">Post</button>
+    </div>
+  </div>
+</div>
+<button id="quote" class="hidden primary" title="Quote the selected words in your reply (key R)">❝ Quote</button>
+<div id="jump" class="hidden">
+  <button id="up" title="Top of the thread">▲</button>
+  <button id="down" title="End of the thread, with the reply box">▼</button>
+</div>
+<script>
+/*
+es-forum 1.1.0: read and post to a repository's issue threads, laid out for a
+phone first. PROTOTYPE CODE, not production.
+
+What it hits: api.github.com only (the Content-Security-Policy line above lets
+the page send data nowhere else).
+  GET  /user                                    your login, once per token
+  GET  /search/issues?q=repo:R is:issue commenter:LOGIN   threads you posted in, once per visit
+  GET  /repos/{repo}/issues/comments            fallback when the search is refused, newest 300 comments
+  POST /graphql                                 thread list with each thread's newest
+                                                comments, 100 threads per call
+  GET  /repos/{repo}/issues                     thread list, 100 per page, all pages,
+                                                when the GraphQL call is refused
+  GET  /repos/{repo}/issues/comments            then, newest first, the comments that
+                                                give each thread its newest reply
+                                                (at most 30 pages of 100)
+  GET  /repos/{repo}/issues/{n}                 opening post
+  GET  /repos/{repo}/issues/{n}/comments        comments, 100 per page, all pages
+  POST /repos/{repo}/issues/{n}/comments        a new comment
+  POST /repos/{repo}/issues/comments/{id}/reactions   a reaction on a comment, picked under React
+  GET  /repos/{repo}/issues/comments?sort=updated     the newest stacked list: the
+                                                comments edited most recently, 100 per
+                                                page, until the newest one carrying
+                                                its hidden line is certain (at most 3
+                                                pages; usually 1 call per list load)
+  PUT  /repos/{repo}/contents/{folder}/{file}   an image from the reply box, one commit
+  GET  /repos/{repo}/contents/{folder}/{file}   that image's bytes, to show it in a post
+Text arrives already rendered by GitHub (body_html, which GitHub sanitises);
+only body_html is ever put on the page. The raw text (body) comes in the same
+reply and is read for one thing only, the bookmark line below; it is never shown.
+A thread's opening post and comments are fetched fresh on every open (the
+browser's cache is bypassed), so marks edited into older replies show at once.
+
+Your bookmark (bookmarks.md): "you" is the first name typed in Settings. The
+page reads the hidden line "reading <you>: ..." from the raw text of the newest
+reply by a bot account (the runs) whose line for you is not "superseded";
+older lines are ignored. It then scrolls to your highlight: a <mark> followed
+by the filled-diamond mark, in your colour from the who's-who list when one is
+given there. A closed fold-out around it opens first. If the highlight can't
+be found, it scrolls to the newest reply and says so above.
+A link to a post (#N/issuecomment-ID) takes precedence over the bookmark.
+
+Folding: a long post is folded behind Show all only
+when your bookmark was found in the thread, and only for posts before the one
+holding it, which you have read. With no bookmark, every post shows whole.
+
+Maths: GitHub sends maths as its source. The page draws the coloured marks
+as symbols and coloured words (a name written \color{#RRGGBB}{\textsf{name}})
+as text in that colour; other maths shows as its source. Under each post,
+Open on GitHub opens that post on github.com and Copy link copies its link.
+
+Display (in Settings, applied at once): text size, page width (auto is 860
+pixels on a phone and 1200 with 18-pixel text on a screen 1000 pixels wide or
+more), light or dark colours, and two debug views: the maths source beside
+each drawn mark, and each post's comment id.
+
+Reactions: each post shows GitHub's reactions with their counts, as the issue
+page does (the eyes a run adds when it starts, for instance). React opens
+GitHub's eight reactions; tapping one adds yours. No reaction starts a run.
+
+Quoting: select words in a post, then tap Quote (or press R on a keyboard);
+they go into the reply box as a quote. R with nothing selected goes to the
+reply box. The grip above the reply box drags it taller (up to three quarters
+of the screen) or shorter; a tap switches between short and tall, and the
+height is kept on this device. Post and Post as note post at once, with no
+confirmation.
+
+Thread order: newest reply first. A thread's newest reply is its newest
+comment, skipping notices by the github-actions bot; with no such comment, the
+opening post. GitHub's own "updated" time is not used, since it also moves when
+an old comment is edited or a label changes.
+
+Images: one pasted or picked in the reply box is redrawn as a PNG (which also
+drops its hidden metadata, such as a phone photo's location), shown with a
+warning that it stays in the repository's history for good, and uploaded only
+on Upload: one commit to the upload folder typed in Settings, on the default
+branch, named <date>-<time>-<your first name>.png in Athens time. Its link
+(GitHub's blob view) goes into your comment text; nothing is posted until you
+post. In a thread, a link to an image in the upload folder of this repository
+is shown as the image, read through the API above (the browser cannot show a
+private repository's file directly). No upload folder set: no upload.
+
+What it stores, in this browser's localStorage under "esforum.*": the token,
+the repository, your first name, the upload folder, the who's-who list (login, name, colour), your login, the time of your last visit, the
+time each thread was last opened (for the "new" dot), unsent drafts, the
+reply box height and the display settings ("esforum.ui"). Clear
+token removes the token and the login; a 401 does too. Nothing of this is
+written in the code.
+*/
+(function(){
+'use strict';
+var API='https://api.github.com', P='esforum.', TZ='Europe/Athens', FALLBACK_PAGES=3, REPLY_PAGES=30;
+// Comments by these accounts are notices, not replies (logins with any "[bot]" ending removed).
+var NOT_REPLY={'github-actions':1};
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var $=function(id){return document.getElementById(id)};
+var el={status:$('status'),settings:$('settings'),token:$('token'),repo:$('repo'),name:$('name'),people:$('people'),list:$('list'),items:$('items'),
+  q:$('q'),state:$('state'),thread:$('thread'),composer:$('composer'),draft:$('draft'),
+  title:$('title'),back:$('back'),newest:$('newest'),post:$('post'),note:$('note'),hint:$('hint'),
+  folder:$('folder'),stacked:$('stacked'),shot:$('shot'),shotimg:$('shotimg'),shotwarn:$('shotwarn'),shotup:$('shotup'),jump:$('jump'),main:document.querySelector('main')};
+var issues=[], timesSource='', listGen=0, current=null;
+var mine=null, mineSource='', minePromise=null;
+// Symbols of the coloured marks, drawn instead of GitHub's maths renderer.
+var SYM={checkmark:'✓',bullet:'•',bigcirc:'◯',gg:'≫',circlearrowright:'↻',circlearrowleft:'↺',blacklozenge:'◆',lozenge:'◇',times:'×',star:'★'};
+
+function get(k,d){try{var v=localStorage.getItem(P+k);return v===null?d:v}catch(e){return d}}
+function set(k,v){try{if(v===null||v==='')localStorage.removeItem(P+k);else localStorage.setItem(P+k,v)}catch(e){}}
+function sget(k){try{return sessionStorage.getItem(P+k)}catch(e){return null}}
+function sset(k,v){try{if(v===null)sessionStorage.removeItem(P+k);else sessionStorage.setItem(P+k,v)}catch(e){}}
+function getJSON(k){try{return JSON.parse(get(k,'{}'))||{}}catch(e){return{}}}
+function say(msg,cls){el.status.textContent=msg||'';el.status.className=cls||''}
+function repo(){return get('repo','')}
+function token(){return get('token','')}
+function login(){return get('login','')}
+function ready(){return!!(token()&&/^[^\/\s]+\/[^\/\s]+$/.test(repo()))}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function when(iso){
+  try{return new Intl.DateTimeFormat('en-GB',{timeZone:TZ,day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(iso))}
+  catch(e){return iso.replace('T',' ').slice(0,16)+' UTC'}
+}
+// Athens date and clock of a time: {d:'2026-10-02', t:'02:21', y:2026, m:10, dd:2}.
+function athens(date){
+  var p={};
+  new Intl.DateTimeFormat('en-GB',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'})
+    .formatToParts(date).forEach(function(x){p[x.type]=x.value});
+  return{d:p.year+'-'+p.month+'-'+p.day,t:p.hour+':'+p.minute,y:+p.year,m:+p.month,dd:+p.day};
+}
+// "02:21" today, "yesterday 23:10", "29 Sep 11:07" older; all in Athens time.
+function shortWhen(iso){
+  try{
+    var a=athens(new Date(iso)), now=athens(new Date());
+    var yest=new Date(Date.UTC(now.y,now.m-1,now.dd-1)).toISOString().slice(0,10);
+    if(a.d===now.d)return a.t;
+    if(a.d===yest)return'yesterday '+a.t;
+    return a.dd+' '+MON[a.m-1]+' '+a.t;
+  }catch(e){return when(iso)}
+}
+function bare(l){return String(l||'').toLowerCase().replace(/\[bot\]$/,'')}
+// Who's who from Settings: "login = Name #RRGGBB", one per line.
+function people(){
+  var out={};
+  get('people','').split(/\r?\n/).forEach(function(line){
+    var m=/^\s*([^\s=]+)\s*=\s*(.*?)\s*(#[0-9a-fA-F]{6})?\s*$/.exec(line);
+    if(m)out[bare(m[1])]={name:m[2]||m[1],colour:m[3]||''};
+  });
+  return out;
+}
+function whoHTML(lg,ppl){
+  var p=ppl[bare(lg)], name=p?p.name:String(lg||'ghost').replace(/\[bot\]$/i,'');
+  return p&&p.colour?'<span class="who c" style="background:'+p.colour+'">'+esc(name)+'</span>':'<span class="who">'+esc(name)+'</span>';
+}
+
+// The visit: the previous visit's time is kept for this tab, so a reload stays the same visit.
+var prevVisit=sget('prev');
+if(prevVisit===null){prevVisit=get('lastVisit','');sset('prev',prevVisit);set('lastVisit',new Date().toISOString())}
+
+function api(path,opt){
+  opt=opt||{};
+  var h={'Accept':opt.accept||'application/vnd.github.full+json','X-GitHub-Api-Version':'2022-11-28'};
+  if(token())h['Authorization']='Bearer '+token();
+  if(opt.body)h['Content-Type']='application/json';
+  return fetch(path.indexOf('http')===0?path:API+path,{method:opt.method||'GET',headers:h,body:opt.body?JSON.stringify(opt.body):undefined,cache:opt.cache||'default'})
+    .then(function(res){
+      if(res.ok)return(opt.raw?res.blob():res.json()).then(function(j){return{data:j,link:res.headers.get('link')||'',status:res.status}});
+      var msg=res.status+' '+res.statusText;
+      if(res.status===401){set('token',null);set('login',null);msg='401: the token was rejected and is cleared. Paste a new one in ⚙.'}
+      else if(res.status===403)msg=res.headers.get('x-ratelimit-remaining')==='0'?'403: GitHub rate limit reached; try again in an hour.':'403: this token may not do that (it needs Issues: read and write on this repository, and Contents: read and write for images).';
+      else if(res.status===404)msg='404: not found, or the token cannot see this repository.';
+      var err=new Error(msg);err.status=res.status;throw err;
+    });
+}
+function nextLink(link){var m=/<([^>]+)>;\s*rel="next"/.exec(link);return m?m[1]:null}
+function all(path,opt){
+  var out=[];
+  function step(p){return api(p,opt).then(function(r){out=out.concat(r.data);var n=nextLink(r.link);return n?step(n):out})}
+  return step(path);
+}
+
+// ---- threads you posted in: one search per visit; the comment list if the search is refused
+function whoami(){
+  if(login())return Promise.resolve(login());
+  return api('/user',{accept:'application/vnd.github+json'}).then(function(r){set('login',r.data.login);return r.data.login});
+}
+function loadMine(){
+  if(minePromise)return minePromise;
+  var cached=sget('mine:'+repo());
+  if(cached){try{var c=JSON.parse(cached);mine=c.set;mineSource=c.source;minePromise=Promise.resolve();return minePromise}catch(e){}}
+  minePromise=whoami().then(function(me){
+    var q='repo:'+repo()+' is:issue commenter:'+me;
+    return api('/search/issues?q='+encodeURIComponent(q)+'&sort=updated&order=desc&per_page=100',{accept:'application/vnd.github+json'})
+      .then(function(r){
+        var s={};r.data.items.forEach(function(i){s[i.number]=1});
+        return{set:s,source:'from the issue search'+(r.data.incomplete_results?' (GitHub marked the result incomplete)':'')};
+      },function(e){
+        if(e.status===401)throw e;
+        var why=e.status||'error', s={}, n=0;
+        function step(p){
+          n++;
+          return api(p,{accept:'application/vnd.github+json'}).then(function(r){
+            r.data.forEach(function(c){if(c.user&&c.user.login===me){var m=/\/issues\/(\d+)$/.exec(c.issue_url||'');if(m)s[m[1]]=1}});
+            var nx=nextLink(r.link);return(nx&&n<FALLBACK_PAGES)?step(nx):null;
+          });
+        }
+        return step('/repos/'+repo()+'/issues/comments?sort=created&direction=desc&per_page=100').then(function(){
+          return{set:s,source:'from the newest '+(FALLBACK_PAGES*100)+' comments, since the issue search was refused ('+why+')'};
+        });
+      });
+  }).then(function(res){
+    mine=res.set;mineSource=res.source;sset('mine:'+repo(),JSON.stringify(res));
+  },function(e){
+    mine={};mineSource='not available ('+e.message+')';minePromise=null;
+  });
+  return minePromise;
+}
+function isMine(i){return!!((mine&&mine[i.number])||(i.user&&login()&&i.user.login===login()))}
+
+// GitHub leaves maths as $...$ inside <math-renderer>; draw the coloured marks as symbols and
+// coloured words (a name in \textsf{...}) as text, in the colour the maths names. Maths the page
+// can't read shows as its raw text; the debug setting shows the source beside every one.
+var TEXT_CMD=/\\(?:textsf|textbf|textit|texttt|textrm|text|mathsf|mathbf|mathit|mathrm|mathtt|operatorname)\s*\{([^{}]*)\}/g;
+// Plain words from TeX text commands, or null when anything else is left in it.
+function texWords(t){
+  var prev;
+  do{prev=t;t=t.replace(TEXT_CMD,'$1')}while(t!==prev);
+  t=t.replace(/\\[ ,;:!]/g,' ').replace(/\\([_&%#$])/g,'$1').replace(/^\{([^{}]*)\}$/,'$1').trim();
+  return!t||/[\\{}^]/.test(t)?null:t;
+}
+function fixMath(root){
+  root.querySelectorAll('math-renderer').forEach(function(m){
+    var raw=m.textContent, tex=raw.replace(/^\$+|\$+$/g,'').trim();
+    var c=/^\\color\s*\{\s*(#[0-9a-fA-F]{3,8}|[a-z]+)\s*\}\s*\{([\s\S]*)\}$/.exec(tex);
+    var body=c?c[2].trim():tex, sym=/^\\?([A-Za-z]+)$/.exec(body), words=texWords(body);
+    var s=document.createElement('span');s.className='mk';
+    if(c&&sym&&SYM.hasOwnProperty(sym[1])){s.textContent=SYM[sym[1]];s.setAttribute('data-sym',sym[1])}
+    else if(words!==null&&/\\/.test(body)){s.textContent=words;s.className='mk tx'}
+    else s.textContent=c?raw:tex;
+    if(c&&s.textContent!==raw){s.style.color=c[1];s.setAttribute('data-c',hex(c[1]))}
+    var src=document.createElement('span');src.className='texsrc';src.textContent=raw;
+    m.replaceWith(s);s.insertAdjacentElement('afterend',src);
+  });
+}
+// "#ABC" and "#aabbcc" both become "#aabbcc"; anything else is lower-cased as it is.
+function hex(c){c=String(c||'').trim().toLowerCase();return/^#[0-9a-f]{3}$/.test(c)?'#'+c[1]+c[1]+c[2]+c[2]+c[3]+c[3]:c}
+// Links to this repository's issues stay in the page; the rest open a new tab.
+function fixLinks(root){
+  var re=new RegExp('^https://github\\.com/'+repo().replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'/(?:issues|pull)/(\\d+)(?:#(issuecomment-\\d+))?','i');
+  root.querySelectorAll('a[href]').forEach(function(a){
+    // Only web, mail and in-page links stay links (GitHub's cleaning already drops the rest).
+    if(!/^(https?:|mailto:|#)/i.test(a.getAttribute('href').trim())){a.removeAttribute('href');a.title='Link removed: not a web address';return}
+    var m=re.exec(a.getAttribute('href'));
+    if(m&&a.getAttribute('href').indexOf('/pull/')<0){a.setAttribute('href','#'+m[1]+(m[2]?'/'+m[2]:''));a.removeAttribute('target')}
+    else{a.target='_blank';a.rel='noopener'}
+  });
+}
+
+// ---- thread list: every thread of the chosen state, ordered by its newest reply
+var GQL='query($o:String!,$n:String!,$c:String,$s:[IssueState!],$since:DateTime){repository(owner:$o,name:$n){'+
+  'issues(first:100,after:$c,states:$s,filterBy:{since:$since},orderBy:{field:UPDATED_AT,direction:DESC}){pageInfo{hasNextPage endCursor}'+
+  'nodes{number title state createdAt updatedAt author{login}labels(first:20){nodes{name color}}comments(last:20){totalCount nodes{createdAt author{login}}}}}}}';
+function ms(iso){return Date.parse(iso)||0}
+function isReply(lg){return!NOT_REPLY[bare(lg)]}
+function opening(i){return{at:i.created_at,who:i.user?i.user.login:'ghost'}}
+function listState(){var v=el.state.value;return v==='new'?(prevVisit?'all':'open'):v}
+function sinceVisit(){return el.state.value==='new'&&prevVisit?prevVisit:null}
+// Route 1: GraphQL, one call per 100 threads, each with its newest 20 comments.
+function viaGraphQL(st,since){
+  var parts=repo().split('/'), out=[];
+  function step(cursor){
+    return api('/graphql',{method:'POST',accept:'application/vnd.github+json',
+      body:{query:GQL,variables:{o:parts[0],n:parts[1],c:cursor,s:st==='all'?null:[st.toUpperCase()],since:since}}})
+      .then(function(r){
+        var d=r.data;
+        if(d.errors||!d.data||!d.data.repository){var e=new Error('GraphQL: '+((d.errors&&d.errors[0]&&d.errors[0].message)||'no data'));e.status='GraphQL';throw e}
+        var c=d.data.repository.issues;
+        c.nodes.forEach(function(n){
+          var i={number:n.number,title:n.title,state:String(n.state).toLowerCase(),created_at:n.createdAt,updated_at:n.updatedAt,
+            user:{login:n.author?n.author.login:'ghost'},comments:n.comments.totalCount,
+            labels:n.labels.nodes.map(function(l){return{name:l.name,color:l.color}})};
+          var cs=n.comments.nodes.filter(function(x){return isReply(x.author&&x.author.login)}), lc=cs[cs.length-1];
+          i.last=lc?{at:lc.createdAt,who:lc.author?lc.author.login:'ghost'}:opening(i);
+          out.push(i);
+        });
+        return c.pageInfo.hasNextPage?step(c.pageInfo.endCursor):out;
+      });
+  }
+  return step(null);
+}
+// Route 2, when GraphQL is refused: the thread list, then the repository's comments, newest first,
+// until every thread has its newest reply (at most REPLY_PAGES pages).
+function viaREST(st,since){
+  var acc={accept:'application/vnd.github+json'}, sq=since?'&since='+encodeURIComponent(since):'';
+  return all('/repos/'+repo()+'/issues?state='+st+sq+'&sort=updated&direction=desc&per_page=100',acc).then(function(list){
+    var th=list.filter(function(i){return!i.pull_request}), pending={}, pages=0, cut=0;
+    th.forEach(function(i){if(i.comments>0)pending[i.number]=i;else i.last=opening(i)});
+    function left(){return Object.keys(pending)}
+    function step(p){
+      if(!left().length)return null;
+      pages++;
+      return api(p,acc).then(function(r){
+        var cur=null;
+        r.data.forEach(function(c){
+          cur=c.created_at;
+          var m=/\/issues\/(\d+)$/.exec(c.issue_url||''), i=m&&pending[m[1]];
+          if(i&&isReply(c.user&&c.user.login)){i.last={at:c.created_at,who:c.user?c.user.login:'ghost'};delete pending[m[1]]}
+        });
+        // A thread opened after the oldest comment read has no reply left to find: its opening post counts.
+        left().forEach(function(k){if(cur&&ms(pending[k].created_at)>ms(cur)){pending[k].last=opening(pending[k]);delete pending[k]}});
+        var nx=nextLink(r.link);
+        if(nx&&pages<REPLY_PAGES)return step(nx);
+        left().forEach(function(k){var i=pending[k];if(nx){i.last={at:i.updated_at,who:'',approx:true};cut++}else i.last=opening(i)});
+      });
+    }
+    return step('/repos/'+repo()+'/issues/comments?sort=created&direction=desc&per_page=100'+sq).then(function(){
+      return{list:th,note:' ('+pages+' pages of comments read'+(cut?'; for '+cut+' threads the comment list ran past '+(REPLY_PAGES*100)+' comments, so their time is GitHub\'s updated time, marked ≈':'')+')'};
+    });
+  });
+}
+function listSummary(){
+  var n=issues.length, m=issues.filter(isMine).length, s;
+  if(el.state.value==='new')s=prevVisit?n+' threads with new replies since your last visit ('+when(prevVisit)+').':'First visit on this device: '+n+' open threads.';
+  else s=n+' threads, newest reply first.';
+  return s+' Reply times '+timesSource+'. Highlighted: '+m+' you posted in, '+mineSource+'.';
+}
+function loadList(){
+  if(!ready()){showSettings(true);say('Fill in ⚙ to start.');return}
+  var gen=++listGen, st=listState(), since=sinceVisit();
+  if(!stackedDone)loadStacked();
+  say('Loading threads…');
+  var times=viaGraphQL(st,since).then(function(l){return{list:l,src:'from the GraphQL API'}},function(e){
+    if(e.status===401)throw e;
+    return viaREST(st,since).then(function(r){return{list:r.list,src:'from the comment list, since the GraphQL call was refused ('+(typeof e.status==='number'?'HTTP '+e.status:e.message)+')'+r.note}});
+  });
+  Promise.all([times,loadMine()]).then(function(r){
+    if(gen!==listGen)return;
+    var l=r[0].list;
+    if(since)l=l.filter(function(i){return ms(i.last.at)>ms(since)});
+    l.sort(function(a,b){return(ms(b.last.at)-ms(a.last.at))||(b.number-a.number)});
+    issues=l;timesSource=r[0].src;
+    drawList();say(listSummary(),'ok');
+  }).catch(function(e){if(gen===listGen)say(e.message,'err')});
+}
+function drawList(){
+  var q=el.q.value.trim().toLowerCase(), seen=getJSON('seen'), ppl=people();
+  el.items.innerHTML=issues.filter(function(i){
+    if(!q)return true;
+    return(('#'+i.number+' '+i.title+' '+i.labels.map(function(l){return l.name}).join(' ')).toLowerCase().indexOf(q)>=0);
+  }).map(function(i){
+    var fresh=!seen[i.number]||ms(seen[i.number])<ms(i.last.at), own=isMine(i);
+    var labs=i.labels.map(function(l){return'<span class="lab" style="border-color:#'+esc(l.color)+'">'+esc(l.name)+'</span>'}).join('');
+    return'<a class="item'+(fresh?' new':'')+(own?' mine':'')+(i.state==='closed'?' closed':'')+'" href="#'+i.number+'">'+
+      '<div class="t"><span class="n">#'+i.number+'</span> '+esc(i.title)+'</div>'+
+      '<div class="m">'+(i.last.approx?'≈ ':'')+esc(shortWhen(i.last.at))+(i.last.who?' '+whoHTML(i.last.who,ppl):'')+
+      ' · '+i.comments+' comments'+(own?' · you posted here':'')+(i.state==='closed'?' · closed':'')+'</div>'+
+      (labs?'<div>'+labs+'</div>':'')+'</a>';
+  }).join('')||(el.state.value==='new'&&prevVisit?'<p>No new replies since your last visit. Pick Open or All above to see older threads.</p>':'<p>No threads match.</p>');
+}
+
+// ---- the newest stacked list: the newest comment whose raw text carries its hidden line
+var STACK_RE=null, stackedDone=false, stackGen=0;
+function loadStacked(){
+  stackedDone=true;
+  var gen=++stackGen, best=null, pages=0;
+  STACK_RE=STACK_RE||new RegExp(reEsc(OPENER)+'\\s*stacked-\\x6aob-list\\s*-->');
+  // Comments come by last edit, newest first. Once a page ends with an edit older than the best
+  // match's creation, no comment created later can follow, so the search stops there.
+  function step(p){
+    pages++;
+    return api(p,{accept:'application/vnd.github+json',cache:'no-store'}).then(function(r){
+      var oldest=null;
+      r.data.forEach(function(c){oldest=c.updated_at;if(STACK_RE.test(c.body||'')&&(!best||ms(c.created_at)>ms(best.created_at)))best=c});
+      var nx=nextLink(r.link);
+      if(nx&&pages<FALLBACK_PAGES&&(!best||ms(oldest)>=ms(best.created_at)))return step(nx);
+      return!!nx;
+    });
+  }
+  step('/repos/'+repo()+'/issues/comments?sort=updated&direction=desc&per_page=100').then(function(more){
+    if(gen!==stackGen)return;
+    var m=best&&/\/issues\/(\d+)$/.exec(best.issue_url||'');
+    if(m){
+      el.stacked.className='';
+      el.stacked.innerHTML='Newest stacked list: <a href="#'+m[1]+'/issuecomment-'+esc(best.id)+'">#'+m[1]+', posted '+esc(shortWhen(best.created_at))+'</a>'+
+        (more&&pages>=FALLBACK_PAGES?' <span class="shotnote">(newest among the '+(pages*100)+' comments edited last)</span>':'');
+    }else{
+      el.stacked.className='none';
+      el.stacked.textContent='No stacked list among the '+(more?pages*100+' comments edited last':'comments of this repository')+'.';
+    }
+  }).catch(function(e){
+    if(gen!==stackGen)return;
+    el.stacked.className='none';el.stacked.textContent='Stacked list not available ('+e.message+')';
+  });
+}
+
+// ---- your bookmark: the hidden line from the raw text, the highlight from the drawn page
+var OPENER='<'+'!'+'--';  // a hidden line's opener, built in parts so this page holds none
+function reEsc(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function isBot(lg){return/\[bot\]$/i.test(String(lg||''))}
+// The newest reply by a run (a bot account) whose line for you is not "superseded".
+function bookmarkLine(cs,name){
+  if(!name)return null;
+  var re=new RegExp(reEsc(OPENER)+'\\s*reading\\s+'+reEsc(name)+'\\s*:\\s*([\\s\\S]*?)\\s*-->','ig');
+  for(var k=cs.length-1;k>=0;k--){
+    var c=cs[k], body=c.body||'', m;
+    if(!isBot(c.user&&c.user.login))continue;
+    re.lastIndex=0;
+    while((m=re.exec(body))){
+      if(/^superseded\b/i.test(m[1]))continue;
+      var after=body.slice(m.index+m[0].length).replace(/^\s+/,'').split(/\r?\n/)[0];
+      return{c:c,refs:m[1]+' '+after};
+    }
+  }
+  return null;
+}
+function myColour(name){
+  var ppl=people(), n=name.toLowerCase();
+  for(var k in ppl)if(ppl[k].name.toLowerCase()===n&&ppl[k].colour)return hex(ppl[k].colour);
+  return'';
+}
+// Every <mark> with a filled-diamond mark right after it (in your colour, when the who's-who gives one).
+function highlights(root,colour){
+  var out=[];
+  root.querySelectorAll('.post .b mark').forEach(function(mk){
+    var n=mk.nextSibling;
+    while(n&&n.nodeType===3&&!n.textContent.trim())n=n.nextSibling;
+    if(n&&n.nodeType===1&&n.getAttribute('data-sym')==='blacklozenge'&&(!colour||n.getAttribute('data-c')===colour))out.push(mk);
+  });
+  return out;
+}
+// Open any closed fold-out around the point, so the scroll can land on it.
+function unfold(node){
+  for(var d=node.parentElement;d;d=d.parentElement)if(d.tagName==='DETAILS')d.open=true;
+}
+function newestReply(){
+  var ps=[].slice.call(el.thread.querySelectorAll('.post'));
+  for(var k=ps.length-1;k>=0;k--)if(isReply(ps[k].getAttribute('data-who')))return ps[k];
+  return ps[ps.length-1]||null;
+}
+// Returns {node, msg, cls} for your bookmark, or null when no live line names you.
+function findBookmark(cs){
+  var name=get('name',''), line=bookmarkLine(cs,name);
+  if(!line)return null;
+  var where='the '+shortWhen(line.c.created_at)+' reply', hs=highlights(el.thread,myColour(name));
+  if(!hs.length){
+    var nr=newestReply();
+    return{node:nr,msg:'Your bookmark line (in '+where+') points to a highlight that isn\'t in this thread, so this is the newest reply instead.',cls:'err'};
+  }
+  var named=hs.filter(function(h){var p=h.closest('.post');return p&&p.getAttribute('data-id')&&line.refs.indexOf(p.getAttribute('data-id'))>=0});
+  var pick=(named.length?named:hs)[(named.length?named:hs).length-1];
+  unfold(pick);
+  return{node:pick,center:true,msg:'Scrolled to your bookmark (line in '+where+')'+(hs.length>1?'; '+hs.length+' highlights matched, this one is '+(named.length?'the one the line names':'the newest')+'.':'.'),cls:'ok'};
+}
+
+// ---- one thread
+function postHTML(p,isIssue){
+  var who=p.user?p.user.login:'ghost', bot=/\[bot\]$/.test(who);
+  var id=isIssue?'top':'issuecomment-'+p.id;
+  return'<article class="post'+(bot?' bot':'')+'" id="'+id+'" data-id="'+(isIssue?'':p.id)+'" data-who="'+esc(who)+'">'+
+    '<div class="h"><span><b>'+esc(who)+'</b> · '+when(p.created_at)+(p.updated_at!==p.created_at?' · edited':'')+' <span class="pid">'+(isIssue?'opening post':esc(p.id))+'</span></span>'+
+    '<a href="'+esc(p.html_url)+'" target="_blank" rel="noopener" title="Open on GitHub">↗</a></div>'+
+    '<div class="b">'+(p.body_html||'<p><i>No text.</i></p>')+'</div>'+
+    '<div class="f"><span class="rxs">'+rxHTML(p.reactions)+'</span>'+
+    (isIssue?'':'<button data-pick title="Add a reaction; starts no run">React</button><span class="pick hidden">'+
+      RX.map(function(x){return'<button data-react="'+p.id+'" data-rx="'+x[0]+'" title="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</span>')+
+    '<button data-expand class="hidden">Show all</button><span class="gap"></span>'+
+    '<a class="gh" href="'+esc(p.html_url)+'" target="_blank" rel="noopener" title="This post on github.com">Open on GitHub</a>'+
+    '<button data-copy="'+esc(p.html_url)+'" title="Copy the github.com link of this post">Copy link</button></div></article>';
+}
+// GitHub's eight reactions in its own order, and the chips that mirror a post's counts.
+var RX=[['+1','👍'],['-1','👎'],['laugh','😄'],['hooray','🎉'],['confused','😕'],['heart','❤️'],['rocket','🚀'],['eyes','👀']];
+function rxHTML(r){
+  return RX.filter(function(x){return r&&r[x[0]]>0}).map(function(x){
+    return'<span class="rx" data-rx="'+x[0]+'" data-n="'+r[x[0]]+'" title="'+x[0]+'">'+x[1]+' '+r[x[0]]+'</span>'}).join('');
+}
+// Fold the long posts before the one holding the bookmark (read already); none without a bookmark.
+function foldBefore(post){
+  var ps=[].slice.call(el.thread.querySelectorAll('.post')), end=ps.indexOf(post);
+  for(var k=0;k<end;k++)if(ps[k].querySelector('.b').scrollHeight>900){
+    ps[k].classList.add('long');ps[k].querySelector('[data-expand]').classList.remove('hidden');
+  }
+}
+function openThread(n,anchor){
+  if(!ready()){showSettings(true);say('Fill in ⚙ to start.');return}
+  current=n;
+  cancelShot();dropShots();
+  show('thread');
+  el.title.textContent='#'+n;
+  el.thread.innerHTML='';
+  el.draft.value=getJSON('drafts')[n]||'';
+  say('Loading #'+n+'…');
+  var prevSeen=getJSON('seen')[n]||'';
+  var fresh={cache:'no-store'};
+  Promise.all([api('/repos/'+repo()+'/issues/'+n,fresh),all('/repos/'+repo()+'/issues/'+n+'/comments?per_page=100',fresh)])
+    .then(function(r){
+      var it=r[0].data, cs=r[1];
+      if(current!==n)return;
+      el.title.textContent='#'+n+' '+it.title;
+      document.title='#'+n+' '+it.title;
+      el.thread.innerHTML='<div class="m" style="color:var(--muted);font-size:13px;margin-top:6px">'+
+        esc(it.state)+' · '+it.labels.map(function(l){return esc(l.name)}).join(', ')+'</div>'+
+        postHTML(it,true)+cs.map(function(c){return postHTML(c,false)}).join('');
+      fixMath(el.thread);fixLinks(el.thread);
+      // Mark posts newer than the last visit.
+      el.thread.querySelectorAll('.post').forEach(function(a,i){
+        var c=i===0?it:cs[i-1];
+        if(prevSeen&&c.created_at>prevSeen)a.classList.add('seen-new');
+      });
+      showShots(el.thread);jumpCheck();
+      var seen=getJSON('seen');seen[n]=it.updated_at;set('seen',JSON.stringify(seen));
+      var head=cs.length+' comments. The blue edge marks posts since your last visit.';
+      var bm=anchor?null:findBookmark(cs);
+      if(bm){if(bm.center)foldBefore(bm.node.closest('.post'));say(head+' '+bm.msg,bm.cls);if(bm.node)bm.node.scrollIntoView(bm.center?{block:'center'}:undefined);return}
+      say(head,'ok');
+      var target=anchor?document.getElementById(anchor):el.thread.querySelector('.seen-new');
+      if(target)target.scrollIntoView();
+    }).catch(function(e){say(e.message,'err')});
+}
+el.thread.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.hasAttribute('data-expand')){b.closest('.post').classList.remove('long');b.classList.add('hidden');return}
+  if(b.hasAttribute('data-copy')){copyText(b.getAttribute('data-copy')).then(function(){say('Link copied: '+b.getAttribute('data-copy'),'ok')},function(){say('The browser refused to copy. The link: '+b.getAttribute('data-copy'),'err')});return}
+  if(b.hasAttribute('data-pick')){var pk=b.nextElementSibling;pk.classList.toggle('hidden');b.textContent=pk.classList.contains('hidden')?'React':'×';return}
+  var id=b.getAttribute('data-react');if(!id)return;
+  var kind=b.getAttribute('data-rx'), post=b.closest('.post'), pick=b.parentElement, btns=pick.querySelectorAll('button');
+  btns.forEach(function(x){x.disabled=true});
+  api('/repos/'+repo()+'/issues/comments/'+id+'/reactions',{method:'POST',body:{content:kind},accept:'application/vnd.github+json'})
+    .then(function(r){
+      // 201: a new reaction; 200: you had already left this one.
+      var added=r.status===201;
+      if(added){
+        var rs={};post.querySelectorAll('.rx').forEach(function(c){rs[c.getAttribute('data-rx')]=+c.getAttribute('data-n')});
+        rs[kind]=(rs[kind]||0)+1;post.querySelector('.rxs').innerHTML=rxHTML(rs);
+      }
+      pick.classList.add('hidden');pick.previousElementSibling.textContent='React';
+      say(b.textContent+(added?' added. Reactions start no run.':' was already yours on this post.'),'ok');
+    })
+    .catch(function(e){say(e.message,'err')})
+    .then(function(){btns.forEach(function(x){x.disabled=false})});
+});
+
+// The clipboard, with the old copy command as the fallback where the browser has no clipboard API.
+function copyText(t){
+  if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).catch(function(){return oldCopy(t)});
+  return oldCopy(t);
+}
+function oldCopy(t){
+  return new Promise(function(ok,no){
+    var a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';
+    document.body.appendChild(a);a.select();var done=false;try{done=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(a);if(done)ok();else no(new Error('copy refused'));
+  });
+}
+
+// ---- display settings: text size, page width, colours, debug views; applied at once
+var UI_KEYS={fs:'ui-fs',w:'ui-w',theme:'ui-theme'};
+function applyUI(){
+  var u=getJSON('ui'), r=document.documentElement;
+  if(u.fs)r.style.setProperty('--fs',u.fs);else r.style.removeProperty('--fs');
+  if(u.w)r.style.setProperty('--w',u.w);else r.style.removeProperty('--w');
+  if(u.theme)r.setAttribute('data-theme',u.theme);else r.removeAttribute('data-theme');
+  document.body.classList.toggle('show-tex',!!u.tex);document.body.classList.toggle('show-ids',!!u.ids);
+  jumpCheck();
+}
+function saveUI(){
+  var u={};
+  for(var k in UI_KEYS)if($(UI_KEYS[k]).value)u[k]=$(UI_KEYS[k]).value;
+  if($('ui-tex').checked)u.tex=1;if($('ui-ids').checked)u.ids=1;
+  set('ui',Object.keys(u).length?JSON.stringify(u):null);applyUI();
+}
+function fillUI(){var u=getJSON('ui');for(var k in UI_KEYS)$(UI_KEYS[k]).value=u[k]||'';$('ui-tex').checked=!!u.tex;$('ui-ids').checked=!!u.ids}
+['ui-fs','ui-w','ui-theme','ui-tex','ui-ids'].forEach(function(id){$(id).addEventListener('change',saveUI)});
+
+// ---- quoting: select words in a post, then Quote (or R on a keyboard)
+var quoteBtn=$('quote'), lastQuote=null;
+// The selected words and their post's author, when the selection sits inside one post's text.
+function selection(){
+  var s=window.getSelection&&window.getSelection();
+  if(current===null||!s||s.isCollapsed||!s.rangeCount)return null;
+  var n=s.getRangeAt(0).commonAncestorContainer;n=n.nodeType===1?n:n.parentElement;
+  var b=n&&n.closest('.post .b'), t=s.toString().trim();
+  if(!b||!el.thread.contains(b)||!t)return null;
+  return{text:t,who:b.closest('.post').getAttribute('data-who')};
+}
+function quoteIn(q){
+  if(!q)return;
+  // The author's login without an @, so a quote notifies nobody.
+  insertLine('> '+q.who.replace(/\[bot\]$/,'')+' wrote:\n>\n'+q.text.split(/\r?\n/).map(function(l){return'> '+l}).join('\n')+'\n');
+  el.draft.dispatchEvent(new Event('input'));
+  var e=el.draft.value.length;el.draft.focus();el.draft.setSelectionRange(e,e);
+  quoteBtn.classList.add('hidden');lastQuote=null;
+}
+document.addEventListener('selectionchange',function(){
+  var q=selection();
+  if(q){lastQuote=q;quoteBtn.style.bottom=(el.composer.offsetHeight+12)+'px'}
+  quoteBtn.classList.toggle('hidden',!q);
+});
+// On pointerdown, so the tap cannot clear the selection before it is read.
+quoteBtn.addEventListener('pointerdown',function(e){e.preventDefault();quoteIn(selection()||lastQuote)});
+document.addEventListener('keydown',function(e){
+  if(current===null||(e.key!=='r'&&e.key!=='R')||e.ctrlKey||e.metaKey||e.altKey)return;
+  var t=e.target;if(t&&(/^(TEXTAREA|INPUT|SELECT)$/.test(t.tagName)||t.isContentEditable))return;
+  e.preventDefault();
+  var q=selection();
+  if(q)quoteIn(q);else el.draft.focus();
+});
+
+// ---- the reply box height: drag the grip, or tap it to switch between short and tall
+var grip=$('grip'), SHORT=60;
+function maxH(){return Math.round(window.innerHeight*0.75)}
+function setDraftH(h,keep){
+  h=Math.max(44,Math.min(Math.round(h),maxH()));
+  el.draft.style.height=h+'px';if(keep)set('draftH',String(h));jumpCheck();
+}
+(function(){var h=parseInt(get('draftH',''),10);if(h>0)el.draft.style.height=Math.min(h,maxH())+'px'})();
+grip.addEventListener('pointerdown',function(e){
+  e.preventDefault();
+  var y0=e.clientY, h0=el.draft.offsetHeight, moved=false;
+  if(grip.setPointerCapture)grip.setPointerCapture(e.pointerId);
+  function mv(ev){var dy=y0-ev.clientY;if(Math.abs(dy)>4)moved=true;if(moved)setDraftH(h0+dy,false)}
+  function up(){
+    grip.removeEventListener('pointermove',mv);grip.removeEventListener('pointerup',up);grip.removeEventListener('pointercancel',up);
+    setDraftH(moved?el.draft.offsetHeight:(el.draft.offsetHeight>SHORT+20?SHORT:window.innerHeight*0.5),true);
+  }
+  grip.addEventListener('pointermove',mv);grip.addEventListener('pointerup',up);grip.addEventListener('pointercancel',up);
+});
+
+// ---- posting
+function saveDraft(){if(current===null)return;var d=getJSON('drafts');if(el.draft.value)d[current]=el.draft.value;else delete d[current];set('drafts',JSON.stringify(d))}
+el.draft.addEventListener('input',function(){
+  saveDraft();
+  var free=/^\s*(note|pc):/i.test(el.draft.value);
+  el.hint.textContent=free?'Starts with note: or pc:, so no reply run starts.':'A comment starts a reply run, about 4 Actions minutes. Starting with note: or pc: starts none.';
+});
+function send(prefix){
+  var text=el.draft.value.trim();if(!text||current===null)return;
+  if(prefix&&!/^\s*(note|pc):/i.test(text))text=prefix+' '+text;
+  el.post.disabled=el.note.disabled=true;say('Posting…');
+  var n=current;
+  api('/repos/'+repo()+'/issues/'+n+'/comments',{method:'POST',body:{body:text}})
+    .then(function(r){
+      el.draft.value='';saveDraft();
+      if(mine&&!mine[n]){mine[n]=1;sset('mine:'+repo(),JSON.stringify({set:mine,source:mineSource}))}
+      say('Posted.','ok');
+      openThread(n,'issuecomment-'+r.data.id);
+    }).catch(function(e){say(e.message+' Your draft is kept.','err')})
+    .then(function(){el.post.disabled=el.note.disabled=false});
+}
+el.post.onclick=function(){send('')};
+el.note.onclick=function(){send('note:')};
+
+// ---- images: pasted or picked in the reply box, one commit each to the upload folder
+var IMG_EXT={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp'};
+var pendingShot=null, shotURLs=[];
+function folder(){return get('folder','')}
+function okFolder(f){return/^[A-Za-z0-9._-]+(\/[A-Za-z0-9._-]+)*$/.test(f)&&!/(^|\/)\.\.?(\/|$)/.test(f)}
+function slug(s){return String(s||'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-+|-+$/g,'')}
+// 2026-10-02-142305-ann.png: Athens date, then hours, minutes and seconds (no colons, which Windows can't check out).
+function shotName(){var d=new Date(), a=athens(d);return a.d+'-'+a.t.replace(':','')+('0'+d.getUTCSeconds()).slice(-2)+'-'+slug(get('name',''))+'.png'}
+// Redraw any image as a PNG; this also drops its hidden metadata.
+function toPNG(file){
+  return new Promise(function(ok,no){
+    var u=URL.createObjectURL(file), im=new Image();
+    im.onload=function(){
+      var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);URL.revokeObjectURL(u);
+      c.toBlob(function(b){if(b)ok(b);else no(new Error('The image could not be turned into a PNG.'))},'image/png');
+    };
+    im.onerror=function(){URL.revokeObjectURL(u);no(new Error('This file could not be read as an image.'))};
+    im.src=u;
+  });
+}
+function cancelShot(){
+  if(pendingShot)URL.revokeObjectURL(pendingShot.url);
+  pendingShot=null;el.shot.classList.add('hidden');el.shotimg.removeAttribute('src');el.shotup.disabled=false;
+}
+function offerShot(file){
+  if(current===null)return;
+  if(!okFolder(folder())){say('Set the upload folder in ⚙ first; no image is uploaded until it is set.','err');return}
+  if(!slug(get('name',''))){say('Type your first name in ⚙ first; it goes into the image\'s file name.','err');return}
+  say('Preparing the image…');
+  toPNG(file).then(function(png){
+    cancelShot();
+    pendingShot={png:png,url:URL.createObjectURL(png),path:folder()+'/'+shotName(),n:current};
+    el.shotimg.src=pendingShot.url;
+    el.shotwarn.textContent='Upload commits this image to '+pendingShot.path+' in '+repo()+', on the default branch ('+Math.ceil(png.size/1024)+' KB). '+
+      'It stays in the repository\'s history for good, even if the file is deleted later. Cropping is yours: crop out anything private before you upload.';
+    el.shot.classList.remove('hidden');jumpCheck();
+    say('Check the image and the warning, then Upload or Cancel.');
+  },function(e){say(e.message,'err')});
+}
+function base64(blob){
+  return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1])};r.onerror=function(){no(new Error('The image could not be read.'))};r.readAsDataURL(blob)});
+}
+function insertLine(t){
+  var d=el.draft, v=d.value, at=typeof d.selectionStart==='number'?d.selectionStart:v.length;
+  var a=v.slice(0,at), b=v.slice(at);
+  d.value=a+(a&&!/\n$/.test(a)?'\n':'')+t+(b&&!/^\n/.test(b)?'\n':'')+b;
+  saveDraft();
+}
+function uploadShot(){
+  var s=pendingShot;if(!s||s.n!==current)return;
+  el.shotup.disabled=true;say('Uploading the image…');
+  base64(s.png).then(function(c){
+    return api('/repos/'+repo()+'/contents/'+s.path.split('/').map(encodeURIComponent).join('/'),{method:'PUT',accept:'application/vnd.github+json',
+      body:{message:'images: '+s.path.split('/').pop()+' (pasted in the reply box of thread '+s.n+')',content:c}});
+  }).then(function(r){
+    var link=r.data&&r.data.content&&r.data.content.html_url;
+    if(!link)throw new Error('GitHub did not send back the image\'s link.');
+    if(pendingShot!==s||current!==s.n)return;
+    insertLine(link);cancelShot();
+    say('Image uploaded; its link is in your comment, which is not posted yet.','ok');
+  }).catch(function(e){el.shotup.disabled=false;say(e.message+' The image was not linked.','err')});
+}
+el.draft.addEventListener('paste',function(e){
+  var it=e.clipboardData&&e.clipboardData.items;if(!it)return;
+  for(var k=0;k<it.length;k++)if(it[k].kind==='file'&&/^image\//.test(it[k].type)){var f=it[k].getAsFile();if(f){e.preventDefault();offerShot(f);return}}
+});
+$('img').onclick=function(){$('pick').click()};
+$('pick').onchange=function(){var f=this.files&&this.files[0];this.value='';if(f)offerShot(f)};
+el.shotup.onclick=uploadShot;
+$('shotno').onclick=function(){cancelShot();say('Image not uploaded.')};
+// In a thread, a link to an image in this repository's upload folder shows the image, read through the API.
+function dropShots(){shotURLs.forEach(function(u){URL.revokeObjectURL(u)});shotURLs=[]}
+function showShots(root){
+  var f=folder();if(!okFolder(f))return;
+  var re=new RegExp('^https://github\\.com/'+reEsc(repo())+'/blob/([^/?#]+)/('+reEsc(f)+'/[^?#]+\\.([A-Za-z]+))$','i'), n=current;
+  root.querySelectorAll('.post .b a[href]').forEach(function(a){
+    var m=re.exec(a.getAttribute('href')), type=m&&IMG_EXT[m[3].toLowerCase()];
+    if(!type)return;
+    api('/repos/'+repo()+'/contents/'+m[2]+'?ref='+encodeURIComponent(decodeURIComponent(m[1])),{accept:'application/vnd.github.raw',raw:true}).then(function(r){
+      if(current!==n)return;
+      var u=URL.createObjectURL(new Blob([r.data],{type:type}));shotURLs.push(u);
+      var im=document.createElement('img');im.className='shotimg';im.alt='Image '+decodeURIComponent(m[2].split('/').pop());im.src=u;
+      a.insertAdjacentElement('afterend',im);
+    },function(e){
+      if(current!==n)return;
+      var t=document.createElement('span');t.className='shotnote';t.textContent=' (image not shown: '+e.message+')';a.insertAdjacentElement('afterend',t);
+    });
+  });
+}
+
+// ---- the round buttons: end and top of the thread, shown when it is longer than one screen
+function jumpCheck(){
+  // Room under the last post for the reply box, so the end of the thread shows the newest post whole.
+  var room=current!==null?el.composer.offsetHeight+16:0, pad=room>140?room+'px':'';
+  if(el.main.style.paddingBottom!==pad)el.main.style.paddingBottom=pad;
+  var on=current!==null&&!el.thread.classList.contains('hidden')&&document.documentElement.scrollHeight>window.innerHeight+1;
+  el.jump.classList.toggle('hidden',!on);
+  if(on)el.jump.style.bottom=(el.composer.offsetHeight+12)+'px';
+}
+$('down').onclick=function(){window.scrollTo(0,document.documentElement.scrollHeight)};
+$('up').onclick=function(){window.scrollTo(0,0)};
+window.addEventListener('resize',jumpCheck);
+if(window.ResizeObserver){var ro=new ResizeObserver(jumpCheck);ro.observe(el.thread);ro.observe(el.composer)}
+
+// ---- views and routing (#12, #12/issuecomment-345)
+function show(v){
+  el.list.classList.toggle('hidden',v!=='list');
+  el.thread.classList.toggle('hidden',v!=='thread');
+  el.composer.classList.toggle('hidden',v!=='thread');
+  el.back.classList.toggle('hidden',v!=='thread');
+  el.newest.classList.toggle('hidden',v!=='thread');
+  if(v!=='thread')cancelShot();
+  jumpCheck();
+}
+function showSettings(on){el.settings.classList.toggle('hidden',!on);if(on){el.token.value=token();el.repo.value=repo();el.name.value=get('name','');el.folder.value=folder();el.people.value=get('people','');fillUI()}}
+function route(){
+  var m=/^#(\d+)(?:\/(issuecomment-\d+))?/.exec(location.hash);
+  if(m){openThread(parseInt(m[1],10),m[2]);return}
+  current=null;show('list');el.title.textContent='es-forum';document.title='es-forum';
+  if(!issues.length)loadList();else{drawList();say(listSummary(),'ok')}
+}
+window.addEventListener('hashchange',route);
+$('back').onclick=function(){location.hash=''};
+$('newest').onclick=function(){var p=el.thread.querySelectorAll('.post');if(p.length)p[p.length-1].scrollIntoView()};
+$('reload').onclick=function(){if(current!==null)openThread(current);else{stackedDone=false;loadList()}};
+$('gear').onclick=function(){showSettings(el.settings.classList.contains('hidden'))};
+$('save').onclick=function(){
+  var t=el.token.value.trim(), r=el.repo.value.trim();
+  if(t!==token()){set('login',null);sset('mine:'+repo(),null)}
+  if(r!==repo())sset('mine:'+repo(),null);
+  set('token',t);set('repo',r);set('name',el.name.value.trim());set('people',el.people.value.trim());
+  set('folder',el.folder.value.trim().replace(/^\/+|\/+$/g,''));stackedDone=false;
+  mine=null;minePromise=null;showSettings(false);issues=[];route();
+};
+$('clear').onclick=function(){set('token',null);set('login',null);sset('mine:'+repo(),null);mine=null;minePromise=null;el.token.value='';say('Token cleared from this device.')};
+el.q.oninput=drawList;
+el.state.onchange=loadList;
+applyUI();
+route();
+})();
+</script>
+</body>
+</html>
